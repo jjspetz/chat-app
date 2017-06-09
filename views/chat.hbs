@@ -1,0 +1,26 @@
+<h1>Chat App</h1>
+<input id="message" onkeypress="send_message(event)">
+<pre id="chat-box"></pre>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var server = io();
+
+  server.on('connect', function (s) {
+    console.log('connected');
+  });
+
+  server.on('chat-msg', function(msg) {
+    var chat = document.getElementById('chat-box');
+    chat.insertAdjacentHTML('beforeend', '\n' + msg);
+  });
+
+  function send_message(event) {
+    var char = event.which || event.keyCode;
+    if (char == '13') {
+      var msg = document.getElementById('message');
+      server.emit('incoming', msg.value);
+      msg.value;
+    }
+  }
+</script>
