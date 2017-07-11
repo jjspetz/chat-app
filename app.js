@@ -1,11 +1,15 @@
 var express = require('express');
 var app = express();
-
+var jwt = require('jsonwebtoken');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var SECRET = 'DEV';
+
+app.use('/static', express.static('public'));
 
 app.get('/', function(req, resp) {
+  var token =jwt.sign({user: 'annonymous'}, SECRET, {expiresIn: 60*60})
   resp.render('chat.hbs');
 });
 
